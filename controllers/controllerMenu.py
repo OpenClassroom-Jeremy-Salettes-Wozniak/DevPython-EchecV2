@@ -1,5 +1,5 @@
 # CONTROLLERS
-from controllers import ControllerTournoi
+from controllers.controllerTournoi import ControllerTournoi
 import os
 
 
