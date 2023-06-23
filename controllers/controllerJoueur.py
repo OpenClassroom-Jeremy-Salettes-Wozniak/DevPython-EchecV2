@@ -14,23 +14,52 @@ class ControllerJoueur(object):
         self.view = ViewJoueur()
 
     def gestionJoueur(self, message=""):
+        """
+            Méthode permettant de gérer le menu de gestion des joueurs.
+
+            Paramètres :
+            ------------
+            message : str
+                Message à afficher en cas d'erreur
+        """
+        
+        # Nettoyage de la console
+        os.system("cls")
+
+        # Affichage du menu de gestion des joueurs
         self.view.gestionJoueur()
-        choix = input("Veillez faire un choix : ")
-        match choix:
-            case "1":
-                self.createJoueur()
-            case "2":
-                print("Vous avez choisi de modifier un joueur")
-            case "3":
-                print("vous avez choisi de supprimer un joueur")
-            case "4":
-                print("Vous avez choisi d'afficher les joueurs")
-            case "5":
-                print("Vous avez choisi d'afficher un joueur")
-            case "6":
-                self.app.accueil()
-            case _:
+
+        # Logique de gestion du menu
+        choix_valide = False
+        while not choix_valide:
+            # Choix de l'utilisateu
+            choix = input("Veillez faire un choix : ")
+            # Vérification de la validité du choix
+            if choix in ["1", "2", "3", "4", "5", "6"]:
+                # Si choix est valide on renvoie la méthode correspondante
+                choix_valide = True
+                # Si choix "1" : Créer un joueur
+                if choix == "1":
+                    self.createJoueur()
+                # Si choix "2" : Modifier un joueur
+                elif choix == "2":
+                    self.updateJoueur()
+                # Si choix "3" : Supprimer un joueur
+                elif choix == "3":
+                    self.deleteJoueur()
+                # Si choix "4" : Afficher les joueurs
+                elif choix == "4":
+                    self.showJoueurs()
+                # Si choix "5" : Afficher un joueur
+                elif choix == "5":
+                    self.showJoueur()
+                # Si choix "6" : Menu principal
+                elif choix == "6":
+                    return False
+            else:
                 self.gestionJoueur("Veuillez faire un choix valide !")
+        
+        return True
 
     def createJoueur(self):
 
@@ -99,4 +128,14 @@ class ControllerJoueur(object):
         )
         joueur.save()
 
-        
+    def updateJoueur(self):
+        pass
+
+    def deleteJoueur(self):
+        pass
+
+    def showJoueurs(self):
+        pass
+
+    def showJoueur(self):
+        pass

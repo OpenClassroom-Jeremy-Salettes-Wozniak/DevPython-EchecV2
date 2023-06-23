@@ -103,12 +103,19 @@ class ControllerMenu:
 
     # TODO: Implémenter la logique de gestion des tournois
     def gestionTournoi(self):
-        self.controllerTournoi.gestionTournoi()
+        accueil = self.controllerTournoi.gestionTournoi()
+        if accueil == False:
+            self.gestionAccueil()
+        
 
   # TODO: Implémenter la logique de gestion des joueurs
     def gestionJoueur(self):
-        self.controllerJoueur.gestionJoueur()
+        accueil = self.controllerJoueur.gestionJoueur()
+        if accueil == False:
+            self.gestionAccueil()
         
     def gestionRapport(self):
         # TODO: Implémenter la logique de gestion des rapports
-        self.controllerRapport.gestionRapport()
+        accueil = self.controllerRapport.gestionRapport()
+        if accueil == False:
+            self.gestionAccueil()

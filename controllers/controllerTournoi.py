@@ -28,12 +28,13 @@ class ControllerTournoi:
         # Affichage du menu de gestion des tournois
         self.view.gestionTournoi(message)
 
+        # Logique de gestion du menu
         choix_valide = False
         while not choix_valide:
             # Choix de l'utilisateur
             choix = input("Veillez faire un choix : ")
             # Vérification de la validité du choix
-            if choix in ["1", "2", "3", "4", "5", "6"]:
+            if choix in ["1", "2", "3", "4", "5", "6", "7"]:
                 # Si choix est valide on renvoie la méthode correspondante
                 choix_valide = True
                 # Si choix "1" : Créer un tournoi
@@ -54,6 +55,9 @@ class ControllerTournoi:
                 # Si choix "6" : Lancer un tournoi
                 elif choix == "6":
                     self.launchTournoi()
+                # Si choix "7" : Menu principal
+                elif choix == "7":
+                    return False
             else:
                 self.gestionTournoi("Veuillez faire un choix valide !")
         return True
@@ -76,4 +80,3 @@ class ControllerTournoi:
     def launchTournoi(self):
         pass
 
-    
