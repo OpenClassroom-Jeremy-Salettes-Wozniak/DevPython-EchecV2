@@ -3,6 +3,9 @@
 # VIEWS
 from views.viewJoueur import ViewJoueur
 
+# MODELS
+from models.joueurs import Joueur
+
 # EXTERNAL LIBRARIES
 import re
 import os
@@ -12,6 +15,7 @@ class ControllerJoueur(object):
     def __init__(self):
         self.name = "ControllerJoueur"
         self.view = ViewJoueur()
+        self.model = Joueur
 
     def gestionJoueur(self, message=""):
         """
@@ -22,7 +26,7 @@ class ControllerJoueur(object):
             message : str
                 Message à afficher en cas d'erreur
         """
-        
+
         # Nettoyage de la console
         os.system("cls")
 
@@ -62,71 +66,96 @@ class ControllerJoueur(object):
         return True
 
     def createJoueur(self):
+        # Nettoyage de la console
+        os.system("cls")
+
+        # JOUEUR DICTIONARY
+        joueur = {}
 
         # ID NATIONAL
-        while True:
-            id_national = input(self.view.demandeIDNational())
-            if re.match("^[A-Z]{2}[0-9]{5}$", id_national):
-                return id_national
-            print(self.view.ErreurIDNational())
+        choixIDNational = False
+        while not choixIDNational:
+            idNational = input("Veuillez saisir l'ID national du joueur : ")
+            # REMATCH AD12345
+            if re.match(r"^[A-Z]{2}[0-9]{5}$", idNational):
+                choixIDNational = True
+                joueur["idNational"] = idNational
+            else:
+                os.system("cls")
+                print("Veuillez saisir un ID national valide !")
 
-        # NOM
-        while True:
-            joueur_nom = input(self.view.demandeJoueurNom())
-            if re.match("^[A-Za-z]+$", joueur_nom):
-                return joueur_nom
-            print(self.view.ErreurJoueurNom())
 
-        # PRENOM
-        while True:
-            joueur_prenom = input(self.view.demandeJoueurPrenom())
-            if re.match("^[A-Za-z]+$", joueur_prenom):
-                return joueur_prenom
-            print(self.view.ErreurJoueurPrenom())
+        # # NOM
+        choixNom = False
+        while not choixNom:
+            nom = input("Veuillez saisir le nom du joueur : ")
+            if re.match(r"^[A-Z]{1}[a-z]+$", nom):
+                choixNom = True
+                joueur["nom"] = nom
+            else:
+                os.system("cls")
+                print("Veuillez saisir un nom valide !")
 
-        # DATE DE NAISSANCE
-        while True:
-            joueur_date_naissance = input(self.view.demandeJoueurDateNaissance())
-            if re.match("^[0-9]{2}/[0-9]{2}/[0-9]{4}$", joueur_date_naissance):
-                return joueur_date_naissance
-            print(self.view.ErreurJoueurDateNaissance())
+        # # PRENOM
+        choixPrenom = False
+        while not choixPrenom:
+            prenom = input("Veuillez saisir le prénom du joueur : ")
+            if re.match(r"^[A-Z]{1}[a-z]+$", prenom):
+                choixPrenom = True
+                joueur["prenom"] = prenom
+            else:
+                os.system("cls")
+                print("Veuillez saisir un prénom valide !")
 
-        # CLASSEMENT ELO
-        ##
-        # Nouveau joueur : 2000 points
-        # En fonction de la partie gagnée ou perdue, le joueur gagne ou perd entre 5 et 30 points
-        # Selon le classement de l'adversaire, le joueur gagne ou perd entre 0 et 15 points
-        ##
-        while True:
-            joueur_classement_elo = input(self.view.demandeJoueurClassementElo()) 
-            if re.match("^[0-9]{4}$", joueur_classement_elo):
-                return joueur_classement_elo
-            print(self.view.ErreurJoueurClassementElo())
+        # # DATE DE NAISANCE
+        choixDateNaissance = False
+        while not choixDateNaissance:
+            dateNaissance = input("Veuillez saisir la date de naissance du joueur : ")
+            if re.match(r"^[0-9]{2}/[0-9]{2}/[0-9]{4}$", dateNaissance):
+                choixDateNaissance = True
+                joueur["dateNaissance"] = dateNaissance
+            else:
+                os.system("cls")
+                print("Veuillez saisir une date de naissance valide ! au format JJ/MM/AAAA")
+
+        # # CLASSEMENT ELO
+        # ##
+        # # Nouveau joueur : 2000 points
+        # # En fonction de la partie gagnée ou perdue, le joueur gagne ou perd entre 5 et 30 points
+        # # Selon le classement de l'adversaire, le joueur gagne ou perd entre 0 et 15 points
+        # ##
+        choixClassementElo = False
+        while not choixClassementElo:
+            classementElo = input("Veuillez saisir le classement ELO du joueur : ")
+            if re.match(r"^[0-9]+$", classementElo):
+                choixClassementElo = True
+                joueur["classementElo"] = classementElo
+            else:
+                os.system("cls")
+                print("Veuillez saisir un classement ELO valide !")
 
         # SEXE
-        while True:
-            joueur_sexe = input(self.view.demandeJoueurSexe())
-            if re.match("^[A-Za-z]+$", joueur_sexe):
-                return joueur_sexe
-            print(self.view.ErreurJoueurSexe())
-
-        id_national = self.demandeIDNational()
-        joueur_nom = self.demandeJoueurNom()
-        joueur_prenom = self.demandeJoueurPrenom()
-        joueur_date_naissance = self.demandeJoueurDateNaissance()
-        joueur_classement_elo = self.demandeJoueurClassementElo()
-        joueur_sexe = self.demandeJoueurSexe()
+        choixSexe = False
+        while not choixSexe:
+            sexe = input("Veuillez saisir le sexe du joueur : ")
+            if re.match(r"^[M|F]$", sexe):
+                choixSexe = True
+                joueur["sexe"] = sexe
+            else:
+                os.system("cls")
+                print("Veuillez saisir un sexe valide ! au format M ou F")
         
         # CREATION DU JOUEUR
-        joueur = self.model(
-            id_national = id_national,
-            joueur_nom = joueur_nom,
-            joueur_prenom = joueur_prenom,
-            joueur_date_naissance = joueur_date_naissance,
-            joueur_classement_elo = joueur_classement_elo,
-            joueur_sexe = joueur_sexe
+        #self, id_national, joueur_nom, joueur_prenom, joueur_date_naissance, classement_elo, sexe
+        newJoueur = self.model(
+            joueur["idNational"],
+            joueur["nom"],
+            joueur["prenom"],
+            joueur["dateNaissance"],
+            joueur["classementElo"],
+            joueur["sexe"]
         )
-        joueur.save()
+        newJoueur.save()
 
     def updateJoueur(self):
         pass
