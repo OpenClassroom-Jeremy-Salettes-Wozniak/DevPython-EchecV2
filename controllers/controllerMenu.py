@@ -1,5 +1,14 @@
+# Authors: Jérémy Salettes-Wozniak
+
 # CONTROLLERS
-from controllers import ControllerTournoi
+from controllers.controllerTournoi import ControllerTournoi
+from controllers.controllerJoueur import ControllerJoueur
+from controllers.controllerRapport import ControllerRapport
+
+# VIEWS
+from views.viewMenu import ViewMenu
+
+# EXTERNAL LIBRARIES
 import os
 
 
@@ -38,7 +47,10 @@ class ControllerMenu:
             Aucun
         """
         self.name = "ControllerMenu"
-
+        self.view = ViewMenu()
+        self.controllerTournoi = ControllerTournoi()
+        self.controllerJoueur = ControllerJoueur()
+        self.controllerRapport = ControllerRapport()
 
     def gestionAccueil(self, message=""):
         """
@@ -60,6 +72,7 @@ class ControllerMenu:
         # Nettoyage de la console
         os.system("cls")
 
+
         # Affichage de la vue
         self.view.selectionMenu(message)
 
@@ -72,12 +85,12 @@ class ControllerMenu:
             if choix in ["1", "2", "3"]:
                 # Si choix est valide on renvoie la méthode correspondante
                 choix_valide = True
-                # Si choix "1" : Gestion des joueurs
+                # Si choix "1" : Gestion des tournois
                 if choix == "1":
-                    self.gestionJoueur()
-                # Si choix "2" : Gestion des tournois
-                elif choix == "2":
                     self.gestionTournoi()
+                # Si choix "2" : Gestion des joueurs
+                elif choix == "2":
+                    self.gestionJoueur()
                 # Si choix "3" : Gestion des rapports
                 elif choix == "3":
                     self.gestionRapport()
@@ -90,12 +103,12 @@ class ControllerMenu:
 
     # TODO: Implémenter la logique de gestion des tournois
     def gestionTournoi(self):
-        pass
+        self.controllerTournoi.gestionTournoi()
 
   # TODO: Implémenter la logique de gestion des joueurs
     def gestionJoueur(self):
-        pass
+        self.controllerJoueur.gestionJoueur()
         
     def gestionRapport(self):
         # TODO: Implémenter la logique de gestion des rapports
-        pass
+        self.controllerRapport.gestionRapport()

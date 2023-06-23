@@ -1,9 +1,8 @@
 # Authors: Jérémy Salettes-Wozniak 
 
 # CONTROLLERS
-from controllers import ControllerMenu
+from controllers.controllerMenu import ControllerMenu
 
-# MAIN
 class App:
     def __init__(self):
         self.name = "App"

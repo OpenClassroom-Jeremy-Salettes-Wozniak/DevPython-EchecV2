@@ -1,10 +1,17 @@
+# Authors: Jérémy Salettes-Wozniak 
 
+# VIEWS
+from views.viewJoueur import ViewJoueur
+
+# EXTERNAL LIBRARIES
 import re
 import os
+
 class ControllerJoueur(object):
 
     def __init__(self):
         self.name = "ControllerJoueur"
+        self.view = ViewJoueur()
 
     def gestionJoueur(self, message=""):
         self.view.gestionJoueur()

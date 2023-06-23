@@ -1,9 +1,16 @@
+# Authors: Jérémy Salettes-Wozniak 
 
+# VIEWS
+from views.viewRapport import ViewRapport
+
+# EXTERNAL LIBRARIES
 import os
+
 class ControllerRapport(object):
 
     def __init__(self):
         self.name = "ControllerRapport"
+        self.view = ViewRapport()
         os.system("cls")
 
     def gestionRapport(self, message = ""):
