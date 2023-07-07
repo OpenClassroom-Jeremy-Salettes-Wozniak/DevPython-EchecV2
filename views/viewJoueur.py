@@ -16,9 +16,7 @@ class ViewJoueur(object):
         print("1 - Créer un joueur")
         print("2 - Modifier un joueur")
         print("3 - Supprimer un joueur")
-        print("4 - Afficher les joueurs")
-        print("5 - Afficher un joueur")
-        print("6 - Retour au menu principal")
+        print("4 - Retour au menu principal")
         print("--------------------------------------------")
         if message != "":
             print(message)
@@ -49,6 +47,17 @@ class ViewJoueur(object):
         if message != "":
             print(message)
 
+    def deleteJoueur(self, message=""):
+        os.system("cls")
+        print("Bienvenue dans le gestionnaire de joueurs !")
+        print("---------------- Supprimer -----------------")
+        print("1 - Supprimer un joueur")
+        print("2 - Retour au menu précédent")
+        print("--------------------------------------------")
+        if message != "":
+            print(message)
+
+        
     # Demande de l'ID national 
     def demandeIDNational(self):
         return "Veuillez entrer l'ID national du joueur (ex: AA12345) : "

@@ -1,18 +1,1 @@
-{
-    "joueurs": {
-        "1": {
-            "id_national": "AE12345",
-            "joueur_nom": "Pierre",
-            "joueur_prenom": "Lafonte",
-            "joueur_date_naissance": "04/48/7825",
-            "classement_elo": "0"
-        },
-        "2": {
-            "id_national": "AZ14526",
-            "joueur_nom": "Test",
-            "joueur_prenom": "Test",
-            "joueur_date_naissance": "04/48/4884",
-            "classement_elo": "0"
-        }
-    }
-}
+{"joueurs": {"1": {"id_national": "AE12345", "joueur_nom": "Pierre", "joueur_prenom": "Lafonte", "joueur_date_naissance": "04/48/7825", "classement_elo": "0"}}}

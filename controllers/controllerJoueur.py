@@ -26,12 +26,12 @@ class ControllerJoueur(object):
             message : str
                 Message à afficher en cas d'erreur
         """
-
+            
         # Nettoyage de la console
         os.system("cls")
 
         # Affichage du menu de gestion des joueurs
-        self.view.gestionJoueur()
+        self.view.gestionJoueur(message)
 
         # Logique de gestion du menu
         choix_valide = False
@@ -39,7 +39,7 @@ class ControllerJoueur(object):
             # Choix de l'utilisateu
             choix = input(self.view.demandeMenu())
             # Vérification de la validité du choix
-            if choix in ["1", "2", "3", "4", "5", "6"]:
+            if choix in ["1", "2", "3", "4"]:
                 # Si choix est valide on renvoie la méthode correspondante
                 choix_valide = True
                 # Si choix "1" : Créer un joueur
@@ -51,14 +51,8 @@ class ControllerJoueur(object):
                 # Si choix "3" : Supprimer un joueur
                 elif choix == "3":
                     self.deleteJoueur()
-                # Si choix "4" : Afficher les joueurs
+                # Si choix "4" : Menu principal
                 elif choix == "4":
-                    self.showJoueurs()
-                # Si choix "5" : Afficher un joueur
-                elif choix == "5":
-                    self.showJoueur()
-                # Si choix "6" : Menu principal
-                elif choix == "6":
                     return False
             else:
                 self.gestionJoueur(self.view.erreurMenu())
@@ -160,7 +154,7 @@ class ControllerJoueur(object):
         # RETOUR AU MENU DE GESTION DES JOUEURS
         self.gestionJoueur()
 
-    def updateJoueur(self):
+    def updateJoueur(self, message=""):
         choixIDNational = False
         # Choix de l'ID National
         while not choixIDNational:
@@ -192,24 +186,60 @@ class ControllerJoueur(object):
                                     nom = input(self.view.demandeJoueurNom())
                                     if re.match(r"^[A-Z]{1}[a-z]+$", nom):
                                         choixNom = True
-                                        self.model.setJoueurPrenom(self, nom, idNational)
-                                        self.gestionJoueur()
+                                        self.model.setNom(self, idNational, nom)
+                                        self.gestionJoueur("Le nom du joueur a bien été modifié !")
                                     else:
                                         os.system("cls")
                                         print(self.view.erreurJoueurNom())
 
                             # Si choix "2" : Modifier le prénom
                             elif choix == "2":
-                                pass
+                                choixPrenom = False
+                                while not choixPrenom:
+                                    prenom = input(self.view.demandeJoueurPrenom())
+                                    if re.match(r"^[A-Z]{1}[a-z]+$", prenom):
+                                        choixPrenom = True
+                                        self.model.setPrenom(self, idNational, prenom)
+                                        self.gestionJoueur("Le prénom du joueur a bien été modifié !")
+                                    else:
+                                        os.system("cls")
+                                        print(self.view.erreurJoueurPrenom())
                             # Si choix "3" : Modifier la date de naissance
                             elif choix == "3":
-                                pass
+                                choixDateNaissance = False
+                                while not choixDateNaissance:
+                                    dateNaissance = input(self.view.demandeJoueurDateNaissance())
+                                    if re.match(r"^[0-9]{2}/[0-9]{2}/[0-9]{4}$", dateNaissance):
+                                        choixDateNaissance = True
+                                        self.model.setDateNaissance(self, idNational, dateNaissance)
+                                        self.gestionJoueur("La date de naissance du joueur a bien été modifiée !")
+                                    else:
+                                        os.system("cls")
+                                        print(self.view.erreurJoueurDateNaissance())
                             # Si choix "4" : Modifier le classement Elo
                             elif choix == "4":
-                                pass
+                                choixClassementElo = False
+                                while not choixClassementElo:
+                                    classementElo = input(self.view.demandeJoueurClassementElo())
+                                    if re.match(r"^[0-9]+$", classementElo):
+                                        choixClassementElo = True
+                                        self.model.setClassementElo(self, idNational, classementElo)
+                                        self.gestionJoueur("Le classement Elo du joueur a bien été modifié !")
+                                    else:
+                                        os.system("cls")
+                                        print(self.view.erreurJoueurClassementElo())
                             # Si choix "5" : Modifier le sexe
                             elif choix == "5":
-                                pass
+                                choixSexe = False
+                                while not choixSexe:
+                                    sexe = input(self.view.demandeJoueurSexe())
+                                    if re.match(r"^[H|F]$", sexe):
+                                        choixSexe = True
+                                        self.model.setSexe(self, idNational, sexe)
+                                        self.gestionJoueur("Le sexe du joueur a bien été modifié !")
+                                    else:
+                                        os.system("cls")
+                                        print(self.view.erreurJoueurSexe())
                             # Si choix "6" : Menu précédent
                             elif choix == "6":
                                 self.gestionJoueur()
@@ -225,11 +255,32 @@ class ControllerJoueur(object):
                 os.system("cls")
                 print(self.view.erreurIDNational())
 
-    def deleteJoueur(self):
-        pass
-
-    def showJoueurs(self):
-        pass
-
-    def showJoueur(self):
-        pass
+    def deleteJoueur(self, message=""):
+        # View : Demande de la personne à supprimer
+        choix_valide = False
+        while not choix_valide:
+            # Si choix différent de "1" ou "2" on répète la demande
+            choix = input(self.view.deleteJoueur())
+            if choix in ["1", "2"]:
+                choix_valide = True
+                # Si choix "1" : Suppression d'une personne
+                if choix == "1":
+                    choixIDNational = False
+                    while not choixIDNational:
+                        # On demande l'ID National
+                        idNational = input(self.view.demandeIDNational())
+                        # On vérifie que l'ID National est valide
+                        if re.match(r"^[A-Z]{2}[0-9]{5}$", idNational):
+                            # Si l'ID National est valide on vérifie qu'il existe dans la base de données
+                            if self.model.existeDansDB(self, "id_national", idNational) == True:
+                                # Si l'ID National existe dans la base de données on supprime la personne
+                                choixIDNational = True
+                                self.model.delete(self, idNational)
+                                self.gestionJoueur("Le joueur a bien été supprimé !")
+                            else:
+                                # Si l'ID National n'existe pas dans la base de données on répète la demande de l'ID National
+                                os.system("cls")
+                                print(self.view.erreurIDNational())
+                else :
+                    # Si choix "2" : Menu précédent
+                    self.gestionJoueur()
