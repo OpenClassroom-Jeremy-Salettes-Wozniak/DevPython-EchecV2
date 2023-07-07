@@ -37,7 +37,7 @@ class ControllerJoueur(object):
         choix_valide = False
         while not choix_valide:
             # Choix de l'utilisateu
-            choix = input("Veillez faire un choix : ")
+            choix = input(self.view.demandeMenu())
             # Vérification de la validité du choix
             if choix in ["1", "2", "3", "4", "5", "6"]:
                 # Si choix est valide on renvoie la méthode correspondante
@@ -61,7 +61,7 @@ class ControllerJoueur(object):
                 elif choix == "6":
                     return False
             else:
-                self.gestionJoueur("Veuillez faire un choix valide !")
+                self.gestionJoueur(self.view.erreurMenu())
         
         return True
 
@@ -75,48 +75,48 @@ class ControllerJoueur(object):
         # ID NATIONAL
         choixIDNational = False
         while not choixIDNational:
-            idNational = input("Veuillez saisir l'ID national du joueur : ")
+            idNational = input(self.view.demandeIDNational())
             # REMATCH AD12345
             if re.match(r"^[A-Z]{2}[0-9]{5}$", idNational):
                 choixIDNational = True
                 joueur["idNational"] = idNational
             else:
                 os.system("cls")
-                print("Veuillez saisir un ID national valide !")
+                print(self.view.erreurIDNational())
 
 
         # # NOM
         choixNom = False
         while not choixNom:
-            nom = input("Veuillez saisir le nom du joueur : ")
+            nom = input(self.view.demandeJoueurNom())
             if re.match(r"^[A-Z]{1}[a-z]+$", nom):
                 choixNom = True
                 joueur["nom"] = nom
             else:
                 os.system("cls")
-                print("Veuillez saisir un nom valide !")
+                print(self.view.erreurJoueurNom())
 
         # # PRENOM
         choixPrenom = False
         while not choixPrenom:
-            prenom = input("Veuillez saisir le prénom du joueur : ")
+            prenom = input(self.view.demandeJoueurPrenom())
             if re.match(r"^[A-Z]{1}[a-z]+$", prenom):
                 choixPrenom = True
                 joueur["prenom"] = prenom
             else:
                 os.system("cls")
-                print("Veuillez saisir un prénom valide !")
+                print(self.view.erreurJoueurPrenom())
 
         # # DATE DE NAISANCE
         choixDateNaissance = False
         while not choixDateNaissance:
-            dateNaissance = input("Veuillez saisir la date de naissance du joueur : ")
+            dateNaissance = input(self.view.demandeJoueurDateNaissance())
             if re.match(r"^[0-9]{2}/[0-9]{2}/[0-9]{4}$", dateNaissance):
                 choixDateNaissance = True
                 joueur["dateNaissance"] = dateNaissance
             else:
                 os.system("cls")
-                print("Veuillez saisir une date de naissance valide ! au format JJ/MM/AAAA")
+                print(self.view.erreurJoueurDateNaissance())
 
         # # CLASSEMENT ELO
         # ##
@@ -126,24 +126,24 @@ class ControllerJoueur(object):
         # ##
         choixClassementElo = False
         while not choixClassementElo:
-            classementElo = input("Veuillez saisir le classement ELO du joueur : ")
+            classementElo = input(self.view.demandeJoueurClassementElo())
             if re.match(r"^[0-9]+$", classementElo):
                 choixClassementElo = True
                 joueur["classementElo"] = classementElo
             else:
                 os.system("cls")
-                print("Veuillez saisir un classement ELO valide !")
+                print(self.view.erreurJoueurClassementElo())
 
         # SEXE
         choixSexe = False
         while not choixSexe:
-            sexe = input("Veuillez saisir le sexe du joueur : ")
+            sexe = input(self.view.demandeJoueurSexe())
             if re.match(r"^[M|F]$", sexe):
                 choixSexe = True
                 joueur["sexe"] = sexe
             else:
                 os.system("cls")
-                print("Veuillez saisir un sexe valide ! au format M ou F")
+                print(self.view.erreurJoueurSexe())
         
         # CREATION DU JOUEUR
         #self, id_national, joueur_nom, joueur_prenom, joueur_date_naissance, classement_elo, sexe
@@ -157,8 +157,73 @@ class ControllerJoueur(object):
         )
         newJoueur.save()
 
+        # RETOUR AU MENU DE GESTION DES JOUEURS
+        self.gestionJoueur()
+
     def updateJoueur(self):
-        pass
+        choixIDNational = False
+        # Choix de l'ID National
+        while not choixIDNational:
+            # On demande l'ID National
+            idNational = input(self.view.demandeIDNational())
+            # On vérifie que l'ID National est valide
+            if re.match(r"^[A-Z]{2}[0-9]{5}$", idNational):
+                # Si l'ID National est valide on vérifie qu'il existe dans la base de données
+                if self.model.existeDansDB(self, "id_national", idNational) == True:
+                    # Si l'ID National existe dans la base de données on demande les informations à modifier
+                    choixIDNational = True
+                    # Nettoyage de la console
+                    os.system("cls")
+                    # Affichage du menu de modification d'un joueur
+                    self.view.updateJoueur()
+                    # Logique de modification d'un joueur
+                    choix_valide = False
+                    while not choix_valide:
+                        # Choix de l'utilisateur
+                        choix = input(self.view.demandeMenu())
+                        # Vérification de la validité du choix
+                        if choix in ["1", "2", "3", "4", "5", "6"]:
+                            # Si choix est valide on renvoie la méthode correspondante
+                            choix_valide = True
+                            # Si choix "1" : Modifier le nom
+                            if choix == "1":
+                                choixNom = False
+                                while not choixNom:
+                                    nom = input(self.view.demandeJoueurNom())
+                                    if re.match(r"^[A-Z]{1}[a-z]+$", nom):
+                                        choixNom = True
+                                        self.model.setJoueurPrenom(self, nom, idNational)
+                                        self.gestionJoueur()
+                                    else:
+                                        os.system("cls")
+                                        print(self.view.erreurJoueurNom())
+
+                            # Si choix "2" : Modifier le prénom
+                            elif choix == "2":
+                                pass
+                            # Si choix "3" : Modifier la date de naissance
+                            elif choix == "3":
+                                pass
+                            # Si choix "4" : Modifier le classement Elo
+                            elif choix == "4":
+                                pass
+                            # Si choix "5" : Modifier le sexe
+                            elif choix == "5":
+                                pass
+                            # Si choix "6" : Menu précédent
+                            elif choix == "6":
+                                self.gestionJoueur()
+                        else:
+                            self.updateJoueur(self.view.erreurMenu())
+                else:
+                    # Si l'ID National n'existe pas dans la base de données on répète la demande de l'ID National
+                    os.system("cls")
+                    print(self.view.erreurIDNational())
+
+            else:
+                # Sinon on répète la demande de l'ID National
+                os.system("cls")
+                print(self.view.erreurIDNational())
 
     def deleteJoueur(self):
         pass
