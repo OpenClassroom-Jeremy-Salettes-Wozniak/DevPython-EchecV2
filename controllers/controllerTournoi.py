@@ -63,7 +63,25 @@ class ControllerTournoi:
         return True
 
     def createTournoi(self):
-        pass
+        # Nettoyage de la console
+        os.system("cls")
+
+        # Tournoi dictionary
+        tournoi = {}
+
+        # Nom du tournoi
+        choixNom = False
+        tournoiNom = input(self.view.nomTournoi)
+        while not choixNom:
+            # Regex Majuscule au début
+            if re.match("^[A-Z][a-z]*$", tournoiNom):
+                choixNom = True
+                tournoi["nom"] = tournoiNom
+            else:
+                tournoiNom = input(self.view.nomTournoiError)
+
+        # Lieu du tournoi
+
 
     def updateTournoi(self):
         pass
