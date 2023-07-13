@@ -98,10 +98,10 @@ class ViewJoueur(object):
         return message
 
     def demandeJoueurSexe(self):
-        return "Veuillez entrer le sexe du joueur (H/F) : "
+        return "Veuillez entrer le sexe du joueur (M/F) : "
 
     def erreurJoueurSexe(self):
-        message = "Erreur, veuillez entrer un sexe valide (H/F)"
+        message = "Erreur, veuillez entrer un sexe valide (M/F)"
         return message
         
     def demandeMenu(self):

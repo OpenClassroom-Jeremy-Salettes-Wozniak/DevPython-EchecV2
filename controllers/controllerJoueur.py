@@ -1,14 +1,14 @@
 # Authors: Jérémy Salettes-Wozniak 
 
 # VIEWS
-from views.viewJoueur import ViewJoueur
+import os
+# EXTERNAL LIBRARIES
+import re
 
 # MODELS
 from models.joueurs import Joueur
+from views.viewJoueur import ViewJoueur
 
-# EXTERNAL LIBRARIES
-import re
-import os
 
 class ControllerJoueur(object):
 

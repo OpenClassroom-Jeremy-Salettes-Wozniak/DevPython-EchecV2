@@ -1,3 +1,5 @@
+from tinydb import TinyDB, Query
+import os
 class Tournoi(object):
 
     def __init__(
@@ -5,15 +7,15 @@ class Tournoi(object):
         tournoi_nom, 
         tournoi_description,
         tournoi_lieu,
-        tournoi_date_debut,
-        tournoi_date_fin,
-        tournoi_heure_debut,
-        tournoi_heure_fin,
+        tournoi_date_debut = "",
+        tournoi_date_fin = "",
+        tournoi_heure_debut = "",
+        tournoi_heure_fin = "",
         tournoi_round= 0,
         tournoi_nb_round = 4,
         tournoi_joueurs = [],
         tournoi_rounds_list = [],
-        tournoi_etat = "Non lancé"
+        tournoi_etat = "Non lance"
         ):
         self.tournoi_nom = tournoi_nom
         self.tournoi_description = tournoi_description
@@ -28,68 +30,33 @@ class Tournoi(object):
         self.tournoi_rounds_list = tournoi_rounds_list
         self.tournoi_etat = tournoi_etat
 
-        # NOM
-        def getTournoiNom(self):
-            return self.tournoi_nom
-        def setTournoiNom(self, tournoi_nom):
-            self.tournoi_nom = tournoi_nom
+    # DATABASE Tournoi
+    def dbTournoi(self):
+        # Si le dossier data n'existe pas, on le crée et on crée le fichier tournois.json
+        if not os.path.exists('data'):
+            os.makedirs('data')
 
-        # DESCRIPTION
-        def getTournoiDescription(self):
-            return self.tournoi_description
-        def setTournoiDescription(self, tournoi_description):
-            self.tournoi_description = tournoi_description
+        # On crée la base de données
+        db = TinyDB('data/tournois.json')
 
-        # LIEU
-        def getTournoiLieu(self):
-            return self.tournoi_lieu
-        def setTournoiLieu(self, tournoi_lieu):
-            self.tournoi_lieu = tournoi_lieu
+        return db
 
-        # DATE DEBUT
-        def getTournoiDateDebut(self):
-            return self.tournoi_date_debut
-        def setTournoiDateDebut(self, tournoi_date_debut):
-            self.tournoi_date_debut = tournoi_date_debut
+    # SAVE TOURNOI EN JSON
+    def saveTournoi(self):
+        # On crée la base de données
+        db = self.dbTournoi()
+        
+        # On nomme la table Tournois
+        table = db.table('tournois')
 
-        # DATE FIN
-        def getTournoiDateFin(self):
-            return self.tournoi_date_fin
-        def setTournoiDateFin(self, tournoi_date_fin):
-            self.tournoi_date_fin = tournoi_date_fin
+        # On récupère les données du tournoi
+        tournoi = self.__dict__
 
-        # HEURE DEBUT
-        def getTournoiHeureDebut(self):
-            return self.tournoi_heure_debut
-        def setTournoiHeureDebut(self, tournoi_heure_debut):
-            self.tournoi_heure_debut = tournoi_heure_debut
+        # On insère les données dans la base de données
+        table.insert(tournoi)
 
-        # HEURE FIN
-        def getTournoiHeureFin(self):
-            return self.tournoi_heure_fin
-        def setTournoiHeureFin(self, tournoi_heure_fin):
-            self.tournoi_heure_fin = tournoi_heure_fin
-            
-        # ROUND ACTUEL
-        def getTournoiRound(self):
-            return self.tournoi_round
-        def setTournoiRound(self, tournoi_round):
-            self.tournoi_round = tournoi_round
 
-        # NOMBRE DE ROUNDS
-        def getTournoiNbRound(self):
-            return self.tournoi_nb_round
-        def setTournoiNbRound(self, tournoi_nb_round):
-            self.tournoi_nb_round = tournoi_nb_round
 
-        # JOUEURS LIST
-        def getTournoiJoueurs(self):
-            return self.tournoi_joueurs
-        def setTournoiJoueurs(self, tournoi_joueurs):
-            self.tournoi_joueurs = tournoi_joueurs
 
-        # ROUNDS LIST
-        def getTournoiRoundsList(self):
-            return self.tournoi_rounds_list
-        def setTournoiRoundsList(self, tournoi_rounds_list):
-            self.tournoi_rounds_list = tournoi_rounds_list
+
+                
