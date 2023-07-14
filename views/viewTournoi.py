@@ -73,3 +73,32 @@ class ViewTournoi(object):
         self.demandeTournoiDescription(message)
 
 
+    def erreurTournoiExistePas(self):
+        message = "Ce tournoi n'existe pas !"
+        self.gestionTournoi(message)
+
+    def updateTournoi(self, message = ""):
+        os.system("cls")
+        print("Bienvenue dans le gestionnaire de tournoi !")
+        print("---------------- Modifier un tournoi ------------------")
+        print("1 - Modifier le nom du tournoi")
+        print("2 - Modifier le lieu du tournoi")
+        print("3 - Modifier le nombre de rondes du tournoi")
+        print("4 - Modifier la description du tournoi")
+        print("5 - Retour au menu précédent")
+        print("--------------------------------------------------------")
+        if message != "":
+            print(message)
+
+    def demandeMenu(self, message = ""):
+        message
+        return message
+
+    def confirmationTournoiDelete(self, message = ""):
+        os.system("cls")
+        print("Bienvenue dans le gestionnaire de tournoi !")
+        print("---------------- Supprimer un tournoi ------------------")
+        print("Voulez-vous vraiment supprimer ce tournoi ? (O/N)")
+        print("--------------------------------------------------------")
+        if message != "":
+            print(message)

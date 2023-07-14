@@ -12,7 +12,7 @@ class Tournoi(object):
         tournoi_heure_debut = "",
         tournoi_heure_fin = "",
         tournoi_round= 0,
-        tournoi_nb_round = 4,
+        tournoi_nb_round = "4",
         tournoi_joueurs = [],
         tournoi_rounds_list = [],
         tournoi_etat = "Non lance"
@@ -55,8 +55,46 @@ class Tournoi(object):
         # On insère les données dans la base de données
         table.insert(tournoi)
 
+    # DELETE TOURNOI EN JSON
+    def deleteTournoi(self, nomTournoi):
+        # On crée la base de données
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        table.remove(Query().tournoi_nom == nomTournoi)
 
 
+    def existeDansDB(self, nom):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        if table.search(Query().tournoi_nom == nom):
+            return True
+        else:
+            return False
 
-
+    def setNomTournoi(self, nomTournoi, nomUpdate):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        table.update({
+            'tournoi_nom': nomUpdate
+        }, Query().tournoi_nom == nomTournoi)
                 
+    def setLieuTournoi(self, nomTournoi, lieuUpdate):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        table.update({
+            'tournoi_lieu': lieuUpdate
+        }, Query().tournoi_nom == nomTournoi)
+
+    def setNombreRondesTournoi(self, nomTournoi, nbRondesUpdate):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        table.update({
+            'tournoi_nb_round': nbRondesUpdate
+        }, Query().tournoi_nom == nomTournoi)
+
+    def setDescriptionTournoi(self, nomTournoi, descriptionUpdate):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        table.update({
+            'tournoi_description': descriptionUpdate
+        }, Query().tournoi_nom == nomTournoi)
