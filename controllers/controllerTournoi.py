@@ -2,9 +2,10 @@
 
 # VIEWS: 
 from views.viewTournoi import ViewTournoi
-
+from views.viewJoueur import ViewJoueur
 # MODELS:
 from models.tournois import Tournoi
+from models.joueurs import Joueur
 
 # EXTERNAL LIBRARIES
 import os
@@ -14,7 +15,9 @@ class ControllerTournoi:
     def __init__(self):
         self.name = "ControllerTournoi"
         self.view = ViewTournoi()
+        self.viewJoueur = ViewJoueur()
         self.model = Tournoi
+        self.modelJoueurs = Joueur
 
     def gestionTournoi(self, message = ""):
         """
@@ -38,7 +41,7 @@ class ControllerTournoi:
             # Choix de l'utilisateur
             choix = input("Veillez faire un choix : ")
             # Vérification de la validité du choix
-            if choix in ["1", "2", "3", "4", "5", "6", "7"]:
+            if choix in ["1", "2", "3", "4", "5", "6"]:
                 # Si choix est valide on renvoie la méthode correspondante
                 choix_valide = True
                 # Si choix "1" : Créer un tournoi
@@ -53,8 +56,11 @@ class ControllerTournoi:
                 # Si choix "4" : Lance ou re
                 elif choix == "4":
                     self.launchTournoi()
-                # Si choix "7" : Menu principal
+                # Si choix "5" : Gestion des joueurs du tournoi
                 elif choix == "5":
+                    self.gestionJoueurTournoi()
+                # Si choix "6" : Menu principal
+                elif choix == "6":
                     return False
             else:
                 self.gestionTournoi("Veuillez faire un choix valide !")
@@ -119,6 +125,9 @@ class ControllerTournoi:
             tournoi_description = tournoi["description"]
         )
         newTournoi.saveTournoi()
+
+        # Retourne au menu gestion du tournois 
+        self.gestionTournoi()
         
     def updateTournoi(self):
         choixNomTournoi = False
@@ -214,6 +223,72 @@ class ControllerTournoi:
                 else:
                     choixNomTournoi = False
 
+    def gestionJoueurTournoi(self, message = ""):
+        choixNomTournoi = ""
+        while not choixNomTournoi:
+            choixNomTournoi = input(self.view.demandeTournoiNom(message))
+            existeDansDB = self.model.existeDansDB(self, choixNomTournoi)
+            if existeDansDB:
+                choix = input(self.view.gestionJoueurTournoi())
+                if choix in ['1', '2', '3']:
+                    if choix == '1':
+                        self.ajouterJoueur(choixNomTournoi)
+                    elif choix == '2':
+                        self.supprimerJoueur(choixNomTournoi)
+                    elif choix == '3':
+                        self.gestionTournoi()
 
-    def launchTournoi(self):
+    def ajouterJoueur(self, choixNomTournoi):
+        choixIDNational = ""
+        while not choixIDNational:
+            choixIDNational = input(self.viewJoueur.demandeIDNational())
+            if re.match("^[A-Z]{2}[0-9]{5}$", choixIDNational):
+                existeDansDB = self.modelJoueurs.existeDansDB(self, "id_national", choixIDNational)
+                if existeDansDB:
+                    nb_joueur = self.model.checkJoueursTournoi(self, choixNomTournoi)
+                    if len(nb_joueur) >= 8:
+                        self.gestionJoueurTournoi('Il y a déjà 8 joueurs dans le tournoi !')
+                    else:
+                        self.model.addJoueurTournoi(self, choixNomTournoi, choixIDNational)
+            else:
+                self.gestionJoueurTournoi('Veuillez entrer un ID national valide !')
+    
+    def supprimerJoueur(self, choixNomTournoi):
+        choixIDNational = ""
+        while not choixIDNational:
+            choixIDNational = input(self.view.demandeJoueurNom())
+            existeDansDB = self.modelJoueurs.existeDansDB(self, choixIDNational)
+            if existeDansDB:
+                self.model.deleteJoueurTournoi(self, choixNomTournoi, choixIDNational)
+            else:
+                self.gestionJoueurTournoi('Le joueur n\'existe pas !')
+
+
+    def launchTournoi(self, message = ""):
         choixNomTournoi = False
+        while not choixNomTournoi:
+            choixNomTournoi = input(self.view.demandeTournoiNom(message))
+            if self.model.existeDansDB(self, choixNomTournoi) == True:
+                # On demande si il veut vraiment lancer le tournoi
+                choixConfirmation = input(self.view.confirmationTournoiLaunch(message))
+                if choixConfirmation == "O":
+                    choixNomTournoi = True
+                    # On verifie qu'il y a bien 8 joueurs dans le tournoi
+                    self.model.checkJoueursTournoi(self, choixNomTournoi)
+                    # On lance le tournoi
+                    self.tournoi()
+                elif choixConfirmation == "N":
+                    self.gestionTournoi()
+                else:
+                    self.launchTournoi('Veuillez resaisir le nom du tournoi et O ou N lorsqu\'on vous le demande !')
+            else:
+                choixNomTournoi = False
+                self.launchTournoi('Veuillez entrer un nom de tournoi valide !')
+
+    def tournoi(self):
+        # On créer tournoi_date_debut
+        # On créer tournoi_heure_debut
+        # On met à jour tournoi_status à "En cours"
+        # On met tournoi_round à 1
+        # On place les joueurs dans la tournoi_rounds_list
+        pass

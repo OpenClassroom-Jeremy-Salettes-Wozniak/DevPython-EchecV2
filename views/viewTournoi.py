@@ -14,7 +14,8 @@ class ViewTournoi(object):
         print("2 - Modifier un tournoi")
         print("3 - Supprimer un tournoi")
         print("4 - Lancer un tournoi")
-        print("5 - Menu principal")
+        print("5 - Gestion des joueurs du tournoi")
+        print("6 - Menu principal")
         print("-------------------------------------------")
         if message != "":
             print(message)
@@ -100,5 +101,34 @@ class ViewTournoi(object):
         print("---------------- Supprimer un tournoi ------------------")
         print("Voulez-vous vraiment supprimer ce tournoi ? (O/N)")
         print("--------------------------------------------------------")
+        if message != "":
+            print(message)
+
+    def confirmationTournoiLaunch(self, message = ""):
+        os.system("cls")
+        print("Bienvenue dans le gestionnaire de tournoi !")
+        print("---------------- Lancer un tournoi ------------------")
+        print("Voulez-vous vraiment lancer ce tournoi ? (O/N)")
+        print("--------------------------------------------------------")
+        if message != "":
+            print(message)
+
+    def gestionJoueurTournoi(self, message=""):
+        os.system("cls")
+        print("Bienvenue dans le gestionnaire de tournoi !")
+        print("---------------- Gestion des joueurs du tournoi ------------------")
+        print("1 - Ajouter un joueur au tournoi")
+        print("2 - Supprimer un joueur du tournoi")
+        print("3 - Retour au menu précédent")
+        print("------------------------------------------------------------------")
+        if message != "":
+            print(message)
+
+    def demandeJoueurNom(self, message=""):
+        os.system("cls")
+        print("Bienvenue dans le gestionnaire de tournoi !")
+        print("---------------- Gestion des joueurs du tournoi ------------------")
+        print("Veuillez entrer le nom du joueur : ")
+        print("------------------------------------------------------------------")
         if message != "":
             print(message)

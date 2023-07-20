@@ -98,3 +98,18 @@ class Tournoi(object):
         table.update({
             'tournoi_description': descriptionUpdate
         }, Query().tournoi_nom == nomTournoi)
+
+    def addJoueurTournoi(self, nomTournoi, joueur):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        table.update({
+            'tournoi_joueurs': joueur
+        }, Query().tournoi_nom == nomTournoi)
+
+
+    def checkJoueursTournoi(self, nomTournoi):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        # On retourne la liste des joueurs du tournoi
+        return table.search(Query().tournoi_nom == nomTournoi)[0]['tournoi_joueurs']
+    
