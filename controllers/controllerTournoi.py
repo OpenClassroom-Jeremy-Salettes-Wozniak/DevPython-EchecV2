@@ -10,6 +10,7 @@ from models.joueurs import Joueur
 # EXTERNAL LIBRARIES
 import os
 import re
+import datetime
 class ControllerTournoi:
     
     def __init__(self):
@@ -240,29 +241,55 @@ class ControllerTournoi:
 
     def ajouterJoueur(self, choixNomTournoi):
         choixIDNational = ""
+        joueurInTournoi = self.model.checkJoueursTournoi(self, choixNomTournoi)
+        print(joueurInTournoi)
         while not choixIDNational:
+            # On demande l'ID national du joueur
             choixIDNational = input(self.viewJoueur.demandeIDNational())
+            # On vérifie que l'ID national est valide
             if re.match("^[A-Z]{2}[0-9]{5}$", choixIDNational):
+                # On vérifie que le joueur existe dans la base de données
                 existeDansDB = self.modelJoueurs.existeDansDB(self, "id_national", choixIDNational)
                 if existeDansDB:
-                    nb_joueur = self.model.checkJoueursTournoi(self, choixNomTournoi)
-                    if len(nb_joueur) >= 8:
+                    if len(joueurInTournoi) == 8:
                         self.gestionJoueurTournoi('Il y a déjà 8 joueurs dans le tournoi !')
                     else:
-                        self.model.addJoueurTournoi(self, choixNomTournoi, choixIDNational)
+                        # Verifier que le joueur que j'ai rentrer n'est pas déja dans la liste
+                        # Si il est dans la liste on affiche un message d'erreur
+                        # Sinon on l'ajoute dans la liste
+                        if self.model.checkJoueursTournoiByIDNatinal(self, choixIDNational, joueurInTournoi):
+                            self.gestionJoueurTournoi('Le joueur est déjà dans le tournoi !')
+                        else:
+                            joueurInTournoi.append(choixIDNational)
+                            print(joueurInTournoi)
+                            self.model.addJoueurTournoi(self, choixNomTournoi, joueurInTournoi)
             else:
                 self.gestionJoueurTournoi('Veuillez entrer un ID national valide !')
     
+    # Supprimer un joueur du tournoi
     def supprimerJoueur(self, choixNomTournoi):
+        # On recupère la liste des joueurs du tournoi
+        listJoueurTournoi = self.model.checkJoueursTournoi(self, choixNomTournoi)
+        print(listJoueurTournoi)
+        # On demande quel joueur supprimer
         choixIDNational = ""
         while not choixIDNational:
-            choixIDNational = input(self.view.demandeJoueurNom())
-            existeDansDB = self.modelJoueurs.existeDansDB(self, choixIDNational)
-            if existeDansDB:
-                self.model.deleteJoueurTournoi(self, choixNomTournoi, choixIDNational)
+            choixIDNational = input(self.viewJoueur.demandeIDNational())
+            # On vérifie que l'ID national est valide
+            if re.match("^[A-Z]{2}[0-9]{5}$", choixIDNational):
+                # On vérifie que le joueur existe dans la base de données
+                existeDansDB = self.modelJoueurs.existeDansDB(self, "id_national", choixIDNational)
+                if existeDansDB:
+                    # On vérifie que le joueur est bien dans la liste des joueurs du tournoi
+                    if self.model.checkJoueursTournoiByIDNatinal(self, choixIDNational, listJoueurTournoi):
+                        # On supprime le joueur de la liste
+                        listJoueurTournoi.remove(choixIDNational)
+                        # On met à jour la liste des joueurs du tournoi
+                        self.model.addJoueurTournoi(self, choixNomTournoi, listJoueurTournoi)
+                    else:
+                        self.gestionJoueurTournoi('Le joueur n\'est pas dans le tournoi !')
             else:
-                self.gestionJoueurTournoi('Le joueur n\'existe pas !')
-
+                self.gestionJoueurTournoi('Veuillez entrer un ID national valide !')
 
     def launchTournoi(self, message = ""):
         choixNomTournoi = False
@@ -273,10 +300,17 @@ class ControllerTournoi:
                 choixConfirmation = input(self.view.confirmationTournoiLaunch(message))
                 if choixConfirmation == "O":
                     choixNomTournoi = True
+                    # TODO: Il ne veut pas me retourner la liste des joueurs du tournoi
                     # On verifie qu'il y a bien 8 joueurs dans le tournoi
-                    self.model.checkJoueursTournoi(self, choixNomTournoi)
-                    # On lance le tournoi
-                    self.tournoi()
+                    # joueurInTournoi = self.model.checkJoueursTournoi(self, choixNomTournoi)
+                    # print(joueurInTournoi)
+            #         listJoueurTournoi = self.model.checkJoueursTournoi(self, choixNomTournoi)
+            #         print(listJoueurTournoi)
+            #         if len(listJoueurTournoi) < 8:
+            #             self.launchTournoi('Il n\'y a pas 8 joueurs dans le tournoi !')
+            #         else:
+            #             # On lance le tournoi
+            #             self.tournoi(choixNomTournoi)
                 elif choixConfirmation == "N":
                     self.gestionTournoi()
                 else:
@@ -285,10 +319,31 @@ class ControllerTournoi:
                 choixNomTournoi = False
                 self.launchTournoi('Veuillez entrer un nom de tournoi valide !')
 
-    def tournoi(self):
-        # On créer tournoi_date_debut
+    def tournoi(self, choixNomTournoi):
+        datetime_complete = datetime.datetime.now()
+        # On créer tournoi_date_debut juste la date sans l'heure
+        date = datetime_complete.strftime("%d/%m/%Y")
+        self.model.setTournoiDateDebut(self, choixNomTournoi, date)
         # On créer tournoi_heure_debut
+        heure = datetime_complete.strftime("%H:%M:%S")
+        self.model.setTournoiHeureDebut(self, choixNomTournoi, heure)
         # On met à jour tournoi_status à "En cours"
-        # On met tournoi_round à 1
-        # On place les joueurs dans la tournoi_rounds_list
+        self.model.setTournoiStatus(self, choixNomTournoi, "En cours")
+
+        # On verifie le round actuel du tournoi
+        tournoi_round = self.model.getTournoiRound(self, choixNomTournoi)
+        if tournoi_round == 0: 
+            # On initialise le round 1
+            self.round_one(choixNomTournoi)
+        else:
+            # On initialise les autres rounds
+            self.other_round(tournoi_round)
+
+    def round_one(self, choixNomTournoi):
+        # incrementer le round
+        # On met à jour tournoi_round à 1
+        self.model.setTournoiRound(self, choixNomTournoi, 1)
+
+
+    def other_round(self, round_name):
         pass

@@ -106,10 +106,59 @@ class Tournoi(object):
             'tournoi_joueurs': joueur
         }, Query().tournoi_nom == nomTournoi)
 
+    def deleteJoueurTournoi(self, nomTournoi, joueur):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        table.update({
+            'tournoi_joueurs': joueur
+        }, Query().tournoi_nom == nomTournoi)
 
     def checkJoueursTournoi(self, nomTournoi):
         db = TinyDB('data/tournois.json')
         table = db.table('tournois')
-        # On retourne la liste des joueurs du tournoi
         return table.search(Query().tournoi_nom == nomTournoi)[0]['tournoi_joueurs']
+    
+    def checkJoueursTournoiByIDNatinal(self, idNational, listeJoueurs):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        print(idNational)
+        if idNational in listeJoueurs:
+            return True
+        else:
+            return False
+    
+    
+    def setTournoiStatus(self, nomTournoi, status):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        table.update({
+            'tournoi_etat': status
+        }, Query().tournoi_nom == nomTournoi)
+
+    def getTournoiRound(self, nomTournoi):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        return table.search(Query().tournoi_nom == nomTournoi)[0]['tournoi_round']
+    
+    def setTournoiRound(self, nomTournoi, round):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        table.update({
+            'tournoi_round': round
+        }, Query().tournoi_nom == nomTournoi)
+
+    def setTournoiDateDebut(self, nomTournoi, dateDebut):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        table.update({
+            'tournoi_date_debut': dateDebut
+        }, Query().tournoi_nom == nomTournoi)
+
+    def setTournoiHeureDebut(self, nomTournoi, heureDebut):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        table.update({
+            'tournoi_heure_debut': heureDebut
+        }, Query().tournoi_nom == nomTournoi)
+
     

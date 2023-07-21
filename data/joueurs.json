@@ -1,1 +1,75 @@
-{"joueurs": {"1": {"id_national": "AE12345", "joueur_nom": "Pierre", "joueur_prenom": "Lafonte", "joueur_date_naissance": "04/48/7825", "classement_elo": "0"}, "2": {"id_national": "AZ11456", "joueur_nom": "Jude", "joueur_prenom": "Lite", "joueur_date_naissance": "12/78/5523", "classement_elo": "0", "sexe": "M"}, "3": {"id_national": "ZA14589", "joueur_nom": "Ride", "joueur_prenom": "Link", "joueur_date_naissance": "14/78/6445", "classement_elo": "0", "sexe": "M"}, "4": {"id_national": "AZ23154", "joueur_nom": "Lude", "joueur_prenom": "Sude", "joueur_date_naissance": "14/78/5115", "classement_elo": "0", "sexe": "F"}, "5": {"id_national": "AZ12345", "joueur_nom": "Re", "joueur_prenom": "Ze", "joueur_date_naissance": "14/48/4888", "classement_elo": "0", "sexe": "M"}}}
+{
+  "joueurs": {
+    "1": {
+      "id_national": "AE12345",
+      "joueur_nom": "Pierre",
+      "joueur_prenom": "Lafonte",
+      "joueur_date_naissance": "04/48/7825",
+      "classement_elo": "0"
+    },
+    "2": {
+      "id_national": "AZ11456",
+      "joueur_nom": "Jude",
+      "joueur_prenom": "Lite",
+      "joueur_date_naissance": "12/78/5523",
+      "classement_elo": "0",
+      "sexe": "M"
+    },
+    "3": {
+      "id_national": "ZA14589",
+      "joueur_nom": "Ride",
+      "joueur_prenom": "Link",
+      "joueur_date_naissance": "14/78/6445",
+      "classement_elo": "0",
+      "sexe": "M"
+    },
+    "4": {
+      "id_national":  "RE14589",
+      "joueur_nom": "Lude",
+      "joueur_prenom": "Sude",
+      "joueur_date_naissance": "14/78/5115",
+      "classement_elo": "0",
+      "sexe": "F"
+    },
+    "5": {
+      "id_national": "AZ12345",
+      "joueur_nom": "Re",
+      "joueur_prenom": "Ze",
+      "joueur_date_naissance": "14/48/4888",
+      "classement_elo": "0",
+      "sexe": "M"
+    },
+    "6": {
+      "id_national": "AB12345",
+      "joueur_nom": "Azety",
+      "joueur_prenom": "Russe",
+      "joueur_date_naissance": "14/48/4888",
+      "classement_elo": "0",
+      "sexe": "M"
+    },
+    "7": {
+      "id_national": "AC12345",
+      "joueur_nom": "Zety",
+      "joueur_prenom": "Paul",
+      "joueur_date_naissance": "14/48/4888",
+      "classement_elo": "0",
+      "sexe": "M"
+    },
+    "8": {
+      "id_national": "AU12345",
+      "joueur_nom": "Arte",
+      "joueur_prenom": "Morty",
+      "joueur_date_naissance": "14/48/4888",
+      "classement_elo": "0",
+      "sexe": "M"
+    },
+    "9": {
+      "id_national": "ZE12345",
+      "joueur_nom": "Test",
+      "joueur_prenom": "Test",
+      "joueur_date_naissance": "14/48/4888",
+      "classement_elo": "0",
+      "sexe": "M"
+    }
+  }
+}
