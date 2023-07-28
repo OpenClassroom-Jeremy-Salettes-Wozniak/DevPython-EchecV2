@@ -161,4 +161,20 @@ class Tournoi(object):
             'tournoi_heure_debut': heureDebut
         }, Query().tournoi_nom == nomTournoi)
 
+    def getTournoiId(self, nomTournoi):
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        return table.search(Query().tournoi_nom == nomTournoi)[0].doc_id
     
+    def saveMatch(self, nomTournoi, round_name, id_tournoi_rounds, matchs_turple):
+        # On ajoute chaque element à tournoi_rounds_list pour le sauvegarder dans la base de données
+        db = TinyDB('data/tournois.json')
+        table = db.table('tournois')
+        table.update({
+            'tournoi_rounds_list': {
+                'round_name': round_name,
+                'id_tournoi_rounds': id_tournoi_rounds,
+                'matchs_turple': matchs_turple
+            }
+        }, Query().tournoi_nom == nomTournoi)
+        

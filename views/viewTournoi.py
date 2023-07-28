@@ -132,3 +132,12 @@ class ViewTournoi(object):
         print("------------------------------------------------------------------")
         if message != "":
             print(message)
+
+    def demandeResultatMatch(self, match,  message=""):
+        print("Bienvenue dans le gestionnaire de tournoi !")
+        print("---------------- Gestion des joueurs du tournoi ------------------")
+        print("Veuillez entrer le résultat du match : ")
+        print(match)
+        print("------------------------------------------------------------------")
+        if message != "":
+            print(message)

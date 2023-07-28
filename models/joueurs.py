@@ -121,3 +121,4 @@ class Joueur(object):
             return False
         else:
             return True
+        

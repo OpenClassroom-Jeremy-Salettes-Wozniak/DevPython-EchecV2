@@ -242,7 +242,6 @@ class ControllerTournoi:
     def ajouterJoueur(self, choixNomTournoi):
         choixIDNational = ""
         joueurInTournoi = self.model.checkJoueursTournoi(self, choixNomTournoi)
-        print(joueurInTournoi)
         while not choixIDNational:
             # On demande l'ID national du joueur
             choixIDNational = input(self.viewJoueur.demandeIDNational())
@@ -261,7 +260,6 @@ class ControllerTournoi:
                             self.gestionJoueurTournoi('Le joueur est déjà dans le tournoi !')
                         else:
                             joueurInTournoi.append(choixIDNational)
-                            print(joueurInTournoi)
                             self.model.addJoueurTournoi(self, choixNomTournoi, joueurInTournoi)
             else:
                 self.gestionJoueurTournoi('Veuillez entrer un ID national valide !')
@@ -270,7 +268,6 @@ class ControllerTournoi:
     def supprimerJoueur(self, choixNomTournoi):
         # On recupère la liste des joueurs du tournoi
         listJoueurTournoi = self.model.checkJoueursTournoi(self, choixNomTournoi)
-        print(listJoueurTournoi)
         # On demande quel joueur supprimer
         choixIDNational = ""
         while not choixIDNational:
@@ -299,18 +296,14 @@ class ControllerTournoi:
                 # On demande si il veut vraiment lancer le tournoi
                 choixConfirmation = input(self.view.confirmationTournoiLaunch(message))
                 if choixConfirmation == "O":
-                    choixNomTournoi = True
                     # TODO: Il ne veut pas me retourner la liste des joueurs du tournoi
                     # On verifie qu'il y a bien 8 joueurs dans le tournoi
-                    # joueurInTournoi = self.model.checkJoueursTournoi(self, choixNomTournoi)
-                    # print(joueurInTournoi)
-            #         listJoueurTournoi = self.model.checkJoueursTournoi(self, choixNomTournoi)
-            #         print(listJoueurTournoi)
-            #         if len(listJoueurTournoi) < 8:
-            #             self.launchTournoi('Il n\'y a pas 8 joueurs dans le tournoi !')
-            #         else:
-            #             # On lance le tournoi
-            #             self.tournoi(choixNomTournoi)
+                    listJoueurTournoi = self.model.checkJoueursTournoi(self, choixNomTournoi)
+                    if len(listJoueurTournoi) < 8:
+                        self.launchTournoi('Il n\'y a pas 8 joueurs dans le tournoi !')
+                    else:
+                        # On lance le tournoi
+                        self.tournoi(choixNomTournoi)
                 elif choixConfirmation == "N":
                     self.gestionTournoi()
                 else:
@@ -334,16 +327,113 @@ class ControllerTournoi:
         tournoi_round = self.model.getTournoiRound(self, choixNomTournoi)
         if tournoi_round == 0: 
             # On initialise le round 1
-            self.round_one(choixNomTournoi)
+            self.round_one(choixNomTournoi, tournoi_round)
         else:
             # On initialise les autres rounds
             self.other_round(tournoi_round)
 
-    def round_one(self, choixNomTournoi):
+    def round_one(self, choixNomTournoi, tournoi_round):
+        datetime_complete = datetime.datetime.now()
+        # On créer tournoi_date_debut juste la date sans l'heure
+        date = datetime_complete.strftime("%d/%m/%Y")
+        self.model.setTournoiDateDebut(self, choixNomTournoi, date)
+        # On créer tournoi_heure_debut
+        heure = datetime_complete.strftime("%H:%M:%S")
+        self.model.setTournoiHeureDebut(self, choixNomTournoi, heure)
+        # On met à jour tournoi_status à "En cours"
+        self.model.setTournoiStatus(self, choixNomTournoi, "En cours")
         # incrementer le round
         # On met à jour tournoi_round à 1
         self.model.setTournoiRound(self, choixNomTournoi, 1)
-
+        # On Separe les joueurs en 2 groupes 
+        # On récupère la liste des joueurs du tournoi
+        listJoueurTournoi = self.model.checkJoueursTournoi(self, choixNomTournoi)
+        self.separate_joueurs(listJoueurTournoi, "round_one", choixNomTournoi)
 
     def other_round(self, round_name):
         pass
+
+    def separate_joueurs(self, listJoueurTournoi, round_name, choixNomTournoi):
+        # Création des deux groupes de 4 joueurs
+        groupe1 = []
+        groupe2 = []
+        # Répartition des joueurs dans les groupes
+        for i in range(0, 4):
+            groupe1.append(listJoueurTournoi[i])
+        for i in range(4, 8):
+            groupe2.append(listJoueurTournoi[i])
+        # Création des matchs entre les joueurs des deux groupes
+        matchs = []
+        if (round_name == "round_one"):
+            for i in range(0, 4):
+                # Prend le premier joueur du groupe 1 et le dernier du groupe 2
+                matchs.append([groupe1[i], groupe2[3-i]])
+        else :
+            pass
+        self.saveMatch(matchs, round_name, choixNomTournoi)
+
+    def saveMatch(self, matchs, round_name, choixNomTournoi):
+        ###
+        # tournoi_rounds_list = [
+        #   round_name, 
+        #   id_tournoi_rounds, 
+        #       (
+        #           id_match, 
+        #           [player1, resultat_player1], 
+        #           [player2, resultat_player2]
+        #       )
+        # ]
+        ###
+        # TODO: Phase 1
+        # On récupère l'id du tournoi
+        id_tournoi = self.model.getTournoiId(self, choixNomTournoi)
+        
+        # On créer l'id du round a partir de l'id du tournoi
+        id_tournoi_rounds = id_tournoi +  id_tournoi
+        # TODO: Phase 2
+        matchs_turple = ()
+        # On créer la turple qui contient les matchs
+        i = 0
+        for match in matchs:
+            # Incrémente i
+            i += 1
+            # On créer l'id du match
+            id_match = int(id_tournoi_rounds) + i
+        
+        # TODO: Phase 3
+        # On créer les listes des matchs
+            player1 = match[0]
+            player2 = match[1]
+            # On demande le résultat du match
+            print("Une victoire vaut 1 point, une défaite 0 point et un match nul 0.5 point")
+            resultat_player1 = input("Quel est le résultat du match entre " + player1 + " ?")
+            resultat_player2 = input("Quel est le résultat du match entre " + player2 + " ?")
+            # On créer deux liste du match
+            match_player1 = [player1, resultat_player1]
+            match_player2 = [player2, resultat_player2]
+
+            # On ajoute à la turple les listes des matchs avec l'id du match
+            matchs_turple += (id_match, match_player1, match_player2)
+
+            # On sauvegarde le round_name, l'id du round et la turple qui contient les resultats des matchs
+            self.model.saveMatch(self, choixNomTournoi, round_name, id_tournoi_rounds, matchs_turple)
+
+
+
+        pass
+        # # Pour chaque match on demande le résultat
+        # for match in matchs:
+        #     # Un match contient les joueurs qui s'affrontent
+        #     # On demande le résultat du match
+        #     player1 = match[0]
+        #     player2 = match[1]
+        #     print("Une victoire vaut 1 point, une défaite 0 point et un match nul 0.5 point")
+        #     resultat_player1 = input("Quel est le résultat du match entre " + player1 + " ?")
+        #     resultat_player2 = input("Quel est le résultat du match entre " + player2 + " ?")
+        #     # On créer deux liste du match
+        #     match_player1 = [player1, resultat_player1]
+        #     match_player2 = [player2, resultat_player2]
+
+        #     # O
+        #     # On ajoute les résultats du match dans la base de données
+        #     self.model.addMatch(self, round_name, match_player1, match_player2)
