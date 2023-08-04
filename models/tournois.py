@@ -166,15 +166,11 @@ class Tournoi(object):
         table = db.table('tournois')
         return table.search(Query().tournoi_nom == nomTournoi)[0].doc_id
     
-    def saveMatch(self, nomTournoi, round_name, id_tournoi_rounds, matchs_turple):
+    def saveMatch(self, tournoi_rounds_list, nomTournoi):
         # On ajoute chaque element à tournoi_rounds_list pour le sauvegarder dans la base de données
         db = TinyDB('data/tournois.json')
         table = db.table('tournois')
         table.update({
-            'tournoi_rounds_list': {
-                'round_name': round_name,
-                'id_tournoi_rounds': id_tournoi_rounds,
-                'matchs_turple': matchs_turple
-            }
+            'tournoi_rounds_list': tournoi_rounds_list
         }, Query().tournoi_nom == nomTournoi)
         

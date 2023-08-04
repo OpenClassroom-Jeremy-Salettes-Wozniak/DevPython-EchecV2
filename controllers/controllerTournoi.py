@@ -391,9 +391,9 @@ class ControllerTournoi:
         # On créer l'id du round a partir de l'id du tournoi
         id_tournoi_rounds = id_tournoi +  id_tournoi
         # TODO: Phase 2
-        matchs_turple = ()
         # On créer la turple qui contient les matchs
         i = 0
+        matchs_tuple = []
         for match in matchs:
             # Incrémente i
             i += 1
@@ -408,15 +408,18 @@ class ControllerTournoi:
             print("Une victoire vaut 1 point, une défaite 0 point et un match nul 0.5 point")
             resultat_player1 = input("Quel est le résultat du match entre " + player1 + " ?")
             resultat_player2 = input("Quel est le résultat du match entre " + player2 + " ?")
-            # On créer deux liste du match
-            match_player1 = [player1, resultat_player1]
-            match_player2 = [player2, resultat_player2]
-
+            # On ajoute à la liste match_player1 le nom du joueur et son résultat
+            match_player1 = ([player1, resultat_player1])
+            # On ajoute à la liste match_player2 le nom du joueur et son résultat
+            match_player2 = ([player2, resultat_player2])
+            
             # On ajoute à la turple les listes des matchs avec l'id du match
-            matchs_turple += (id_match, match_player1, match_player2)
+            new_match = (id_match, match_player1, match_player2)
+            matchs_tuple.append(new_match)
 
-            # On sauvegarde le round_name, l'id du round et la turple qui contient les resultats des matchs
-            self.model.saveMatch(self, choixNomTournoi, round_name, id_tournoi_rounds, matchs_turple)
+        tournoi_rounds_list = [round_name, id_tournoi_rounds, matchs_tuple]
+        # On sauvegarde le round_name, l'id du round et la turple qui contient les resultats des matchs
+        self.model.saveMatch(self, tournoi_rounds_list, choixNomTournoi)
 
 
 
